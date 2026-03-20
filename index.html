@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Moneyflo — Login</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script type="module" src="js/script.js" defer></script>
+  </head>
+  <body class="login-page">
+    <div class="page-wrapper">
+      <div class="form-panel">
+        <div id="login-container" class="form-inner">
+          <div class="brand">
+            <div class="brand-logo">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14.93V18h-2v-1.07A4.002 4.002 0 018 13h2a2 2 0 104 0 4.002 4.002 0 01-3-3.87V8h2v1.07A4.002 4.002 0 0116 13a4.002 4.002 0 01-3 3.93z"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="brand-name">Moneyflo</div>
+              <div class="brand-tagline">Financial clarity, every day</div>
+            </div>
+          </div>
+
+          <h2>Welcome back</h2>
+          <p class="form-subtext">Sign in to your account to continue.</p>
+          <div class="gold-divider"></div>
+
+          <form id="login-form">
+            <label for="login-email">Email</label>
+            <input
+              type="email"
+              id="login-email"
+              name="login-email"
+              placeholder="you@example.com"
+              required
+            />
+
+            <label for="login-password">Password</label>
+            <input
+              type="password"
+              id="login-password"
+              name="login-password"
+              placeholder="••••••••"
+            />
+
+            <button type="submit" id="login-button">
+              <span class="btn-text">Sign In</span>
+            </button>
+
+            <p id="login-footer">
+              Don't have an account?
+              <a href="register.html" target="_self" class="flip-link"
+                >Register here</a
+              >
+            </p>
+          </form>
+        </div>
+      </div>
+
+      <div class="visual-panel">
+        <div class="visual-content">
+          <div class="visual-headline">
+            <h1>Your money,<br /><em>under control.</em></h1>
+            <p>Smart tracking · Clear insights · Zero stress</p>
+          </div>
+
+          <div class="dash-card">
+            <div class="balance-row">
+              <div>
+                <div class="balance-label">Total Balance</div>
+                <div class="balance-amount">₹84,320</div>
+                <div class="balance-change">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  >
+                    <polyline points="18 15 12 9 6 15" />
+                  </svg>
+                  +12.4% this month
+                </div>
+              </div>
+              <div class="donut-wrap">
+                <svg viewBox="0 0 70 70">
+                  <circle class="donut-track" cx="35" cy="35" r="26" />
+                  <circle class="donut-fill" cx="35" cy="35" r="26" />
+                </svg>
+                <div class="donut-center">67%<br />saved</div>
+              </div>
+            </div>
+
+            <div class="budget-bar-wrap">
+              <div class="budget-bar-label">
+                <span>Housing</span><span>₹22,000 / ₹30,000</span>
+              </div>
+              <div class="budget-bar-track">
+                <div
+                  class="budget-bar-fill gold-fill"
+                  style="width: 0%"
+                  data-width="73%"
+                ></div>
+              </div>
+            </div>
+
+            <div class="budget-bar-wrap">
+              <div class="budget-bar-label">
+                <span>Food &amp; Dining</span><span>₹5,400 / ₹12,000</span>
+              </div>
+              <div class="budget-bar-track">
+                <div
+                  class="budget-bar-fill green-fill"
+                  style="width: 0%"
+                  data-width="45%"
+                ></div>
+              </div>
+            </div>
+
+            <div class="txn-list">
+              <div class="txn-item">
+                <div class="txn-icon food">🍜</div>
+                <div class="txn-info">
+                  <div class="txn-name">Swiggy Order</div>
+                  <div class="txn-date">Today, 1:32 PM</div>
+                </div>
+                <div class="txn-amount out">−₹348</div>
+              </div>
+              <div class="txn-item">
+                <div class="txn-icon travel">🚇</div>
+                <div class="txn-info">
+                  <div class="txn-name">Metro Card Recharge</div>
+                  <div class="txn-date">Yesterday</div>
+                </div>
+                <div class="txn-amount out">−₹500</div>
+              </div>
+              <div class="txn-item">
+                <div class="txn-icon shop">💰</div>
+                <div class="txn-info">
+                  <div class="txn-name">Salary Credit</div>
+                  <div class="txn-date">Mar 1, 2025</div>
+                </div>
+                <div class="txn-amount in">+₹65,000</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pill-row">
+            <span class="pill green">✓ Budgets</span>
+            <span class="pill gold">✓ Reports</span>
+            <span class="pill muted">✓ Goals</span>
+            <span class="pill green">✓ Insights</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
