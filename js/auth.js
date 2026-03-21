@@ -6,20 +6,18 @@ import {
   signInWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
 
-let uid = "";
-
 function registerUser(registerForm) {
   registerForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     try {
       const registerFormData = new FormData(registerForm);
-      const object = Object.fromEntries(registerFormData.entries());
+      const form = Object.fromEntries(registerFormData.entries());
 
-      const name = object["register-name"];
-      const email = object["register-email"];
-      const password = object["register-password"];
-      const mobileNumber = object["mobile-number"];
+      const name = form["register-name"];
+      const email = form["register-email"];
+      const password = form["register-password"];
+      const mobileNumber = form["mobile-number"];
 
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -27,7 +25,7 @@ function registerUser(registerForm) {
         password,
       );
 
-      uid = userCredential.user.uid;
+      let uid = userCredential.user.uid;
       await addUserData(uid, email, name, mobileNumber);
       alert("Account created successfully!");
       window.location.href = "index.html";
@@ -42,13 +40,15 @@ function loginUser(loginForm) {
     event.preventDefault();
 
     const loginFormData = new FormData(loginForm);
-    const object = Object.fromEntries(loginFormData.entries());
+    const form = Object.fromEntries(loginFormData.entries());
 
-    const email = object["login-email"];
-    const password = object["login-password"];
+    const email = form["login-email"];
+    const password = form["login-password"];
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        let uid = userCredential.user.uid;
+        localStorage.setItem("uid", uid);
         alert("Login successfully done!");
         window.location.href = "dashboard.html";
       })

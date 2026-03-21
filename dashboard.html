@@ -5,8 +5,172 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Moneyflo</title>
     <link rel="stylesheet" href="css/dashboard.css" />
+    <script type="module" src="js/dashboard.js"></script>
   </head>
   <body>
-    <p id="username"></p>
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">₹</div>
+        <span class="brand-label">Moneyflo</span>
+      </div>
+
+      <div class="sidebar-user">
+        <div class="user-avatar"></div>
+        <div class="user-meta">
+          <span class="user-greeting">Welcome back,</span>
+          <p id="username"></p>
+        </div>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div id="info">
+        <p class="sidebar-section-label">Setup</p>
+        <form id="info">
+          <div class="field-group">
+            <label id="label-for-income" for="income">Monthly Income</label>
+            <div class="input-prefix-wrap">
+              <span class="input-prefix">₹</span>
+              <input
+                type="number"
+                id="income"
+                name="income"
+                placeholder="e.g. 85,000"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="categories">New Category</label>
+            <input
+              type="text"
+              id="categories"
+              name="categories"
+              placeholder="e.g. Food, Travel…"
+              required
+            />
+          </div>
+
+          <button type="submit" id="add-category-button">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Add Category
+          </button>
+        </form>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <button id="insight-button">
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+        </svg>
+        Check Insights
+      </button>
+    </aside>
+
+    <main class="main">
+      <header class="stats-bar">
+        <div class="stat-card stat-card--income">
+          <span class="stat-card__label">Monthly Income</span>
+          <span class="stat-card__value" id="stat-income-display">—</span>
+        </div>
+        <div class="stat-card stat-card--spent">
+          <span class="stat-card__label">Total Spent</span>
+          <span class="stat-card__value" id="user-current-spending">₹0</span>
+        </div>
+        <div class="stat-card stat-card--remaining">
+          <span class="stat-card__label">Remaining</span>
+          <span class="stat-card__value" id="stat-remaining">—</span>
+        </div>
+      </header>
+
+      <section class="form-section" id="expense-form-container">
+        <div class="form-section__header">
+          <h2 class="form-section__title">Log an Expense</h2>
+          <p class="form-section__sub">
+            Every rupee tracked is a step toward clarity.
+          </p>
+        </div>
+
+        <form id="expense-form" class="expense-grid">
+          <div class="field-group">
+            <label for="amount">Amount</label>
+            <div class="input-prefix-wrap">
+              <span class="input-prefix">₹</span>
+              <input type="number" id="amount" name="amount" placeholder="0" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="description">Description</label>
+            <input
+              type="text"
+              id="description"
+              name="description"
+              placeholder="What was this for?"
+            />
+          </div>
+
+          <div class="field-group">
+            <label for="category">Category</label>
+            <div class="select-wrap">
+              <select id="category" name="category"></select>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" />
+          </div>
+
+          <div class="field-group field-group--submit">
+            <button type="submit" id="add-expense">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add Expense
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="cards-section">
+        <div class="cards-section__header">
+          <h2 class="cards-section__title">Recent Expenses</h2>
+          <span class="cards-section__pill">This Month</span>
+        </div>
+        <div id="expenses-container"></div>
+      </section>
+    </main>
   </body>
 </html>
