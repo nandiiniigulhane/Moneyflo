@@ -27,7 +27,6 @@ function registerUser(registerForm) {
 
       let uid = userCredential.user.uid;
       await addUserData(uid, email, name, mobileNumber);
-      alert("Account created successfully!");
       window.location.href = "index.html";
     } catch (error) {
       alert(error.message);
@@ -49,7 +48,6 @@ function loginUser(loginForm) {
       .then((userCredential) => {
         let uid = userCredential.user.uid;
         localStorage.setItem("uid", uid);
-        alert("Login successfully done!");
         window.location.href = "dashboard.html";
       })
       .catch((error) => {

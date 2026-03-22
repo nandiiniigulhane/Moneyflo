@@ -6,6 +6,15 @@
     <title>Moneyflo</title>
     <link rel="stylesheet" href="css/dashboard.css" />
     <script type="module" src="js/dashboard.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
   </head>
   <body>
     <aside class="sidebar">
@@ -26,48 +35,49 @@
 
       <div id="info">
         <p class="sidebar-section-label">Setup</p>
-        <form id="info">
-          <div class="field-group">
-            <label id="label-for-income" for="income">Monthly Income</label>
-            <div class="input-prefix-wrap">
-              <span class="input-prefix">₹</span>
-              <input
-                type="number"
-                id="income"
-                name="income"
-                placeholder="e.g. 85,000"
-                required
-              />
-            </div>
-          </div>
 
-          <div class="field-group">
-            <label for="categories">New Category</label>
+        <div class="field-group">
+          <label id="label-for-income" for="income">Monthly Income</label>
+          <div class="input-prefix-wrap">
+            <span class="input-prefix">₹</span>
             <input
-              type="text"
-              id="categories"
-              name="categories"
-              placeholder="e.g. Food, Travel…"
+              type="number"
+              id="income"
+              name="income"
+              placeholder="e.g. 85,000"
               required
             />
           </div>
 
-          <button type="submit" id="add-category-button">
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              stroke-linecap="round"
-            >
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            Add Category
-          </button>
-        </form>
+          <button type="submit" id="submit-income-button">Add income</button>
+        </div>
+
+        <div class="field-group">
+          <label for="categories">New Category</label>
+          <input
+            type="text"
+            id="categories"
+            name="categories"
+            placeholder="e.g. Food, Travel…"
+            required
+          />
+        </div>
+
+        <button type="submit" id="add-category-button">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          >
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          Add Category
+        </button>
       </div>
 
       <div class="sidebar-divider"></div>

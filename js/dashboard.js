@@ -4,64 +4,106 @@ import {
   getExpensesData,
   setIncome,
   getIncome,
+  getAllCategories,
+  addCategory,
+  getTotalSpent,
 } from "./db.js";
+
+const income = document.getElementById("income");
+
+function replaceAddIncomeToEditIncome() {
+  const incomeButton = document.getElementById("submit-income-button");
+  if (income.readOnly === true && incomeButton) {
+    incomeButton.remove();
+  }
+}
 
 const username = document.getElementById("username");
 getUsername().then((user) => {
   username.textContent = user;
 });
 
-const income = document.getElementById("income");
 getIncome().then((incomeValue) => {
-  income.value = incomeValue;
-  const montlyIncomeStat = document.getElementById("stat-income-display");
-  montlyIncomeStat.textContent = incomeValue;
-
-  const remainingStat = document.getElementById("stat-remaining");
-  remainingStat.textContent = incomeValue;
-});
-
-let incomeValue = 0;
-let categories = new Set();
-
-const setupForm = document.getElementById("info");
-setupForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const income = document.getElementById("income");
-  incomeValue = income.value;
-  setIncome(incomeValue);
-
-  if (incomeValue !== null) {
-    income.readOnly = true;
-    const montlyIncomeStat = document.getElementById("stat-income-display");
-    montlyIncomeStat.textContent = incomeValue;
-
-    const remainingStat = document.getElementById("stat-remaining");
-    remainingStat.textContent = incomeValue;
+  if (!incomeValue) {
+    return;
   }
 
+  income.value = incomeValue;
+  income.readOnly = true;
+
+  replaceAddIncomeToEditIncome();
+
+  const incomeButton = document.getElementById("submit-income-button");
+
+  const montlyIncomeStat = document.getElementById("stat-income-display");
+  montlyIncomeStat.textContent = "₹ " + incomeValue;
+
+  const remainingStat = document.getElementById("stat-remaining");
+  remainingStat.textContent = "₹ " + incomeValue;
+});
+
+const totalSpentElement = document.getElementById("user-current-spending");
+let totalSpentByUser;
+let remainingAmount;
+
+getTotalSpent().then((totalSpent) => {
+  totalSpentByUser = totalSpent;
+  totalSpentElement.textContent = "₹ " + totalSpent;
+
+  remainingAmount = Number(income.value) - totalSpent;
+  const remainingStat = document.getElementById("stat-remaining");
+  remainingStat.textContent = "₹ " + remainingAmount;
+});
+
+const incomeButton = document.getElementById("submit-income-button");
+incomeButton.addEventListener("click", async (event) => {
+  event.preventDefault();
+
+  const incomeElement = document.getElementById("income");
+  const incomeValue = incomeElement.value;
+
+  if (!incomeValue || incomeValue.trim() === "" || Number(incomeValue) <= 0) {
+    alert("add income!");
+    return;
+  }
+  setIncome(incomeElement.value);
+
+  income.readOnly = true;
+  const montlyIncomeStat = document.getElementById("stat-income-display");
+  montlyIncomeStat.textContent = "₹ " + incomeElement.value;
+
+  const remainingStat = document.getElementById("stat-remaining");
+  remainingAmount = incomeValue;
+  remainingStat.textContent = incomeElement.value;
+
+  replaceAddIncomeToEditIncome();
+});
+
+let categories = new Set();
+
+const categoryButton = document.getElementById("add-category-button");
+categoryButton.addEventListener("click", async (event) => {
+  event.preventDefault();
+
   const categoryElement = document.getElementById("categories");
+  await addCategory(categoryElement.value);
+
+  if (categories.has(categoryElement.value)) {
+    return;
+  }
   categories.add(categoryElement.value);
+  categoryDropDown(categoryElement.value);
   categoryElement.value = "";
-
-  const selectTag = document.getElementById("category");
-  selectTag.replaceChildren();
-  categories.forEach((category) => {
-    const option = document.createElement("option");
-    option.value = category;
-    option.textContent = category;
-
-    selectTag.appendChild(option);
-  });
 });
 
 const transactionForm = document.getElementById("expense-form");
 transactionForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  if (categories.size === 0) {
-    alert("first add categories");
+  const income = await getIncome();
+  if (!income) {
+    alert("add income first!");
+    return;
   }
 
   const formData = new FormData(transactionForm);
@@ -72,7 +114,30 @@ transactionForm.addEventListener("submit", async (event) => {
   let category = transaction["category"];
   let date = transaction["date"];
 
+  let parsedDate;
+
+  if (!date || date.trim() === "") {
+    parsedDate = new Date();
+  } else {
+    parsedDate = new Date(date);
+  }
+
+  const formattedDate = parsedDate.toLocaleDateString("en-GB");
+  date = formattedDate;
+
+  if (!amount || amount.trim() === "" || !category || category.trim() === "") {
+    alert("add amount and category!");
+    return;
+  }
+
   addExpenseData(amount, description, category, date);
+  totalSpentByUser += Number(amount);
+  totalSpentElement.textContent = "₹ " + totalSpentByUser;
+
+  const remainingStat = document.getElementById("stat-remaining");
+  remainingAmount -= Number(amount);
+  remainingStat.textContent = "₹ " + remainingAmount;
+
   transactionCard(amount, category, description, date);
   transactionForm.reset();
 });
@@ -117,4 +182,26 @@ function initLoadingTransactions() {
   });
 }
 
+function categoryDropDown(category) {
+  categories.add(category);
+  const selectTag = document.getElementById("category");
+
+  const option = document.createElement("option");
+  option.value = category;
+  option.textContent = category;
+
+  selectTag.appendChild(option);
+}
+
+function initCategoriesDropDown() {
+  let count = 0;
+  getAllCategories().then((categories) => {
+    categories.forEach((category) => {
+      categoryDropDown(category);
+      count++;
+    });
+  });
+}
+
 initLoadingTransactions();
+initCategoriesDropDown();

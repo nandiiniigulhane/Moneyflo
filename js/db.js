@@ -5,6 +5,7 @@ import {
   collection,
   addDoc,
   getDoc,
+  arrayUnion,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
@@ -109,6 +110,60 @@ async function getIncome() {
   }
 }
 
+async function addCategory(category) {
+  try {
+    let uid = localStorage.getItem("uid");
+    const userRef = doc(db, collectionName, uid);
+
+    await setDoc(
+      userRef,
+      {
+        categories: arrayUnion(category),
+      },
+      { merge: true },
+    );
+
+    alert("new category added!");
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+async function getAllCategories() {
+  try {
+    let uid = localStorage.getItem("uid");
+    const userRef = doc(db, collectionName, uid);
+    const userSnap = await getDoc(userRef);
+    let categories = userSnap.data().categories;
+    return categories;
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+async function getTotalSpent() {
+  try {
+    let uid = localStorage.getItem("uid");
+    const transactionCollection = await collection(
+      db,
+      collectionName,
+      uid,
+      "transactions",
+    );
+
+    const transactionSnap = await getDocs(transactionCollection);
+    let totalSpent = 0;
+    totalSpent = transactionSnap.docs.reduce((sum, doc) => {
+      return sum + Number(doc.data().amount || 0);
+    }, 0);
+
+    console.log(totalSpent);
+    return totalSpent;
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 export {
   addUserData,
   addExpenseData,
@@ -116,4 +171,7 @@ export {
   getExpensesData,
   setIncome,
   getIncome,
+  addCategory,
+  getAllCategories,
+  getTotalSpent,
 };
