@@ -10,6 +10,8 @@ import {
   deleteExpenseDate,
 } from "./db.js";
 
+initCheckUserAuthentication();
+
 let totalSpentByUser;
 let remainingAmount;
 
@@ -36,7 +38,6 @@ function addIncome() {
   montlyIncomeStat.textContent = "₹ " + incomeElement.value;
 
   const remainingStat = document.getElementById("stat-remaining");
-  // remainingAmount = incomeValue;
   remainingAmount = incomeValue - totalSpentByUser;
   remainingStat.textContent = "₹ " + remainingAmount;
 
@@ -280,9 +281,16 @@ function initCategoriesDropDown() {
 const logOutButton = document.getElementById("logout-user");
 logOutButton.addEventListener("click", async (event) => {
   event.preventDefault();
-  localStorage.removeItem("uid");
+  localStorage.clear();
   window.location.href = "index.html";
 });
+
+function initCheckUserAuthentication() {
+  const flag = localStorage.getItem("isAuthenticated");
+  if (!flag) {
+    window.location.href = "index.html";
+  }
+}
 
 initLoadingTransactions();
 initCategoriesDropDown();
