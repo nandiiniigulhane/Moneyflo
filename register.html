@@ -151,6 +151,8 @@
               id="register-password"
               name="register-password"
               placeholder="Create a strong password"
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              title="Must contain at least one number, uppercase/lowercase letter, and 8+ characters"
               required
             />
 

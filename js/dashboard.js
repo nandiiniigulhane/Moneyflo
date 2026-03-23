@@ -7,14 +7,67 @@ import {
   getAllCategories,
   addCategory,
   getTotalSpent,
+  deleteExpenseDate,
 } from "./db.js";
 
+let totalSpentByUser;
+let remainingAmount;
+
 const income = document.getElementById("income");
+
+function editIncome() {
+  income.readOnly = false;
+  income.value = "";
+  replaceEditIncomeToAddIncome();
+}
+
+function addIncome() {
+  const incomeElement = document.getElementById("income");
+  const incomeValue = incomeElement.value;
+
+  if (!incomeValue || incomeValue.trim() === "" || Number(incomeValue) <= 0) {
+    alert("add income!");
+    return;
+  }
+  setIncome(incomeElement.value);
+
+  income.readOnly = true;
+  const montlyIncomeStat = document.getElementById("stat-income-display");
+  montlyIncomeStat.textContent = "₹ " + incomeElement.value;
+
+  const remainingStat = document.getElementById("stat-remaining");
+  // remainingAmount = incomeValue;
+  remainingAmount = incomeValue - totalSpentByUser;
+  remainingStat.textContent = "₹ " + remainingAmount;
+
+  replaceAddIncomeToEditIncome();
+}
+
+function replaceEditIncomeToAddIncome() {
+  const editIncomeButton = document.getElementById("edit-income-button");
+  if (editIncomeButton) {
+    const addIncomeButton = document.createElement("button");
+    addIncomeButton.type = "submit";
+    addIncomeButton.id = "submit-income-button";
+    addIncomeButton.textContent = "add income";
+    addIncomeButton.addEventListener("click", () => {
+      addIncome();
+    });
+    editIncomeButton.replaceWith(addIncomeButton);
+  }
+}
 
 function replaceAddIncomeToEditIncome() {
   const incomeButton = document.getElementById("submit-income-button");
   if (income.readOnly === true && incomeButton) {
-    incomeButton.remove();
+    const editIncomeButton = document.createElement("button");
+    editIncomeButton.type = "submit";
+    editIncomeButton.id = "edit-income-button";
+    editIncomeButton.textContent = "edit income";
+    editIncomeButton.addEventListener("click", () => {
+      editIncome();
+    });
+    incomeButton.replaceWith(editIncomeButton);
   }
 }
 
@@ -43,8 +96,6 @@ getIncome().then((incomeValue) => {
 });
 
 const totalSpentElement = document.getElementById("user-current-spending");
-let totalSpentByUser;
-let remainingAmount;
 
 getTotalSpent().then((totalSpent) => {
   totalSpentByUser = totalSpent;
@@ -130,7 +181,7 @@ transactionForm.addEventListener("submit", async (event) => {
     return;
   }
 
-  addExpenseData(amount, description, category, date);
+  const id = await addExpenseData(amount, description, category, date);
   totalSpentByUser += Number(amount);
   totalSpentElement.textContent = "₹ " + totalSpentByUser;
 
@@ -138,14 +189,15 @@ transactionForm.addEventListener("submit", async (event) => {
   remainingAmount -= Number(amount);
   remainingStat.textContent = "₹ " + remainingAmount;
 
-  transactionCard(amount, category, description, date);
+  transactionCard(id, amount, category, description, date);
   transactionForm.reset();
 });
 
-function transactionCard(amount, category, description, date) {
+function transactionCard(id, amount, category, description, date) {
   const expenseContainer = document.getElementById("expenses-container");
-  const cardDiv = document.createElement("div");
 
+  const cardDiv = document.createElement("div");
+  cardDiv.id = id;
   const amountElement = document.createElement("p");
   amountElement.textContent = amount;
   amountElement.classList.add("card-amount");
@@ -166,13 +218,35 @@ function transactionCard(amount, category, description, date) {
   descriptionElement.classList.add("card-date");
   cardDiv.appendChild(dateElement);
 
+  const deleteTransactionButton = document.createElement("button");
+  deleteTransactionButton.id = "delete-transaction-card" + id;
+  deleteTransactionButton.textContent = "delete transaction";
+  cardDiv.appendChild(deleteTransactionButton);
+
   expenseContainer.appendChild(cardDiv);
+  deleteTransactionButton.addEventListener("click", () =>
+    deleteTransaction(id, amount),
+  );
+}
+
+function deleteTransaction(cardId, amount) {
+  const cardElement = document.getElementById(cardId);
+  deleteExpenseDate(cardId);
+  cardElement.remove();
+
+  totalSpentByUser -= Number(amount);
+  totalSpentElement.textContent = "₹ " + totalSpentByUser;
+
+  const remainingStat = document.getElementById("stat-remaining");
+  remainingAmount += Number(amount);
+  remainingStat.textContent = "₹ " + remainingAmount;
 }
 
 function initLoadingTransactions() {
   getExpensesData().then((transactions) => {
     transactions.forEach((transaction) => {
       transactionCard(
+        transaction.id,
         transaction["amount"],
         transaction["category"],
         transaction["description"],
@@ -202,6 +276,13 @@ function initCategoriesDropDown() {
     });
   });
 }
+
+const logOutButton = document.getElementById("logout-user");
+logOutButton.addEventListener("click", async (event) => {
+  event.preventDefault();
+  localStorage.removeItem("uid");
+  window.location.href = "index.html";
+});
 
 initLoadingTransactions();
 initCategoriesDropDown();

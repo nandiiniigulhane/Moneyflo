@@ -5,6 +5,7 @@ import {
   collection,
   addDoc,
   getDoc,
+  deleteDoc,
   arrayUnion,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
@@ -47,8 +48,22 @@ async function addExpenseData(amount, description, category, date) {
       date: date,
     };
 
-    await addDoc(transactionCollection, transactionDetail, { merge: true });
+    const expenseRef = await addDoc(transactionCollection, transactionDetail, {
+      merge: true,
+    });
+    return expenseRef.id;
     alert("Transacion added successfully!");
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+async function deleteExpenseDate(id) {
+  try {
+    let uid = localStorage.getItem("uid");
+    const expenseRef = doc(db, collectionName, uid, "transactions", id);
+    await deleteDoc(expenseRef);
+    alert("trasaction deleted!");
   } catch (error) {
     alert(error.message);
   }
@@ -66,7 +81,8 @@ async function getExpensesData() {
 
     const transactionSnap = await getDocs(transactionCollection);
     const dataList = transactionSnap.docs.map((doc) => ({
-      amount: doc.amount,
+      id: doc.id,
+      // amount: doc.amount,
       ...doc.data(),
     }));
 
@@ -157,7 +173,6 @@ async function getTotalSpent() {
       return sum + Number(doc.data().amount || 0);
     }, 0);
 
-    console.log(totalSpent);
     return totalSpent;
   } catch (error) {
     console.log(error.message);
@@ -174,4 +189,5 @@ export {
   addCategory,
   getAllCategories,
   getTotalSpent,
+  deleteExpenseDate,
 };
