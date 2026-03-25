@@ -13,14 +13,14 @@ Moneyflo is a JavaScript-based expense tracker that lets users securely log in, 
 
 ## Features
 
-- **Authentication** — secure login & registration using Firebase Auth
-- **Cloud storage** — user data (income, categories, transactions) stored in Firebase Firestore
-- **Monthly income setup** — set once, edit any time
-- **Custom categories** — create your own (Food, Travel, EMI, etc.)
-- **Expense logging** — amount, description, category, and date
-- **Live stats** — income, total spent, and remaining balance update instantly
-- **Transaction cards** — all logged expenses displayed dynamically
-- **Delete transactions** — removes the entry and recalculates your stats
+- **Authentication** - secure login & registration using Firebase Auth
+- **Cloud storage** - user data (income, categories, transactions) stored in Firebase Firestore
+- **Monthly income setup** - set once, edit any time
+- **Custom categories** - create your own (Food, Travel, EMI, etc.)
+- **Expense logging** - amount, description, category, and date
+- **Live stats** - income, total spent, and remaining balance update instantly
+- **Transaction cards** - all logged expenses displayed dynamically
+- **Delete transactions** - removes the entry and recalculates your stats
 
 ---
 
@@ -28,12 +28,12 @@ Moneyflo is a JavaScript-based expense tracker that lets users securely log in, 
 
 No build step required. Just serve the files from any static file server.
 
-### Option 1 — VS Code Live Server
+### Option 1 - VS Code Live Server
 
 1. Open the project folder in VS Code
 2. Right-click `index.html` → **Open with Live Server**
 
-### Option 2 — Python
+### Option 2 - Python
 
 ```bash
 python -m http.server 8000
