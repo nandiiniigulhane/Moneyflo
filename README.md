@@ -5,6 +5,11 @@
 
 ---
 
+## 🌐 Live Demo
+
+Check out the app here:  
+👉 https://nandiiniigulhane.github.io/Moneyflo/
+
 ## Overview
 
 Moneyflo is a JavaScript-based expense tracker that lets users securely log in, set a monthly income, create custom spending categories, and track expenses in real time with data stored in Firebase.
@@ -36,6 +41,6 @@ No build step required. Just serve the files from any static file server.
 ### Option 2 - Python
 
 ```bash
-python -m http.server 8000
-then open: http://localhost:8000
+python -m http.server ${portNumber} or python3 -m http.server ${portNumber}
+then open: http://localhost:${portNumber}$
 ```

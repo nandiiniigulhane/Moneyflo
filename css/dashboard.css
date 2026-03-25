@@ -1,8 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap");
 
-/* ─────────────────────────────────────────────
-   TOKENS
-───────────────────────────────────────────── */
 :root {
   --forest: #091410;
   --forest-mid: #0e1c17;
@@ -38,9 +35,6 @@
   --t: 0.3s;
 }
 
-/* ─────────────────────────────────────────────
-   RESET
-───────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -55,9 +49,6 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ─────────────────────────────────────────────
-   BODY + ATMOSPHERE
-───────────────────────────────────────────── */
 body {
   font-family: "DM Sans", sans-serif;
   background: var(--forest);
@@ -67,7 +58,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Grain texture */
 body::before {
   content: "";
   position: fixed;
@@ -77,7 +67,6 @@ body::before {
   z-index: 999;
 }
 
-/* Ambient bottom-right gold orb */
 body::after {
   content: "";
   position: fixed;
@@ -95,9 +84,6 @@ body::after {
   z-index: 0;
 }
 
-/* ─────────────────────────────────────────────
-   SIDEBAR
-───────────────────────────────────────────── */
 .sidebar {
   width: var(--sidebar-w);
   flex-shrink: 0;
@@ -114,7 +100,6 @@ body::after {
   animation: sidebarIn 0.65s var(--ease) both;
 }
 
-/* Green atmospheric glow at top of sidebar */
 .sidebar::before {
   content: "";
   position: absolute;
@@ -142,7 +127,6 @@ body::after {
   }
 }
 
-/* Brand */
 .sidebar-brand {
   display: flex;
   align-items: center;
@@ -188,7 +172,6 @@ body::after {
   letter-spacing: -0.015em;
 }
 
-/* User block */
 .sidebar-user {
   display: flex;
   align-items: center;
@@ -249,7 +232,6 @@ body::after {
   min-height: 1.25em;
 }
 
-/* Shimmer skeleton while loading */
 #username:empty::after {
   content: "";
   display: inline-block;
@@ -276,7 +258,6 @@ body::after {
   }
 }
 
-/* Dividers & labels */
 .sidebar-divider {
   height: 1px;
   background: var(--divider);
@@ -296,7 +277,6 @@ body::after {
   z-index: 1;
 }
 
-/* Info panel */
 #info:not(form) {
   display: flex;
   flex-direction: column;
@@ -330,7 +310,6 @@ label,
   text-transform: uppercase;
 }
 
-/* Inputs */
 input[type="number"],
 input[type="text"],
 input[type="date"] {
@@ -394,7 +373,6 @@ input:focus {
   padding-left: 26px;
 }
 
-/* Income display box */
 #user-income {
   display: flex;
   align-items: baseline;
@@ -457,11 +435,6 @@ input:focus {
   }
 }
 
-/* ─────────────────────────────────────────────
-   SIDEBAR BUTTONS
-───────────────────────────────────────────── */
-
-/* Shared base */
 #submit-income-button,
 #edit-income-button,
 #add-category-button {
@@ -495,7 +468,6 @@ input:focus {
   box-shadow: none !important;
 }
 
-/* Add / Submit Income — solid gold CTA */
 #submit-income-button {
   background: linear-gradient(135deg, var(--gold) 0%, #a6821e 100%);
   color: var(--forest);
@@ -533,7 +505,6 @@ input:focus {
   left: 130%;
 }
 
-/* Edit Income — outlined secondary */
 #edit-income-button {
   background: rgba(201, 168, 76, 0.07);
   color: var(--gold-light);
@@ -564,7 +535,6 @@ input:focus {
   opacity: 1;
 }
 
-/* Add Category */
 #add-category-button {
   background: rgba(30, 69, 48, 0.45);
   color: var(--gold);
@@ -596,9 +566,6 @@ input:focus {
   opacity: 1;
 }
 
-/* ─────────────────────────────────────────────
-   LOGOUT BUTTON
-───────────────────────────────────────────── */
 #logout-user {
   display: inline-flex;
   align-items: center;
@@ -624,7 +591,6 @@ input:focus {
     transform 0.2s var(--ease);
 }
 
-/* Door icon */
 #logout-user::before {
   content: "";
   display: inline-block;
@@ -653,9 +619,6 @@ input:focus {
   transform: translateY(0);
 }
 
-/* ─────────────────────────────────────────────
-   MAIN
-───────────────────────────────────────────── */
 .main {
   flex: 1;
   display: flex;
@@ -677,9 +640,6 @@ input:focus {
   }
 }
 
-/* ─────────────────────────────────────────────
-   STATS BAR
-───────────────────────────────────────────── */
 .stats-bar {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -780,9 +740,6 @@ input:focus {
   color: var(--danger);
 }
 
-/* ─────────────────────────────────────────────
-   FORM SECTION
-───────────────────────────────────────────── */
 .form-section {
   padding: 38px 44px 34px;
   border-bottom: 1px solid var(--divider);
@@ -916,7 +873,6 @@ input:focus {
   color: var(--cream);
 }
 
-/* Add Expense button */
 #add-expense {
   display: flex;
   align-items: center;
@@ -981,9 +937,6 @@ input:focus {
   transform: translateY(0);
 }
 
-/* ─────────────────────────────────────────────
-   CARDS SECTION
-───────────────────────────────────────────── */
 .cards-section {
   padding: 38px 44px 24px;
   flex: 1;
@@ -1016,9 +969,6 @@ input:focus {
   color: var(--gold);
 }
 
-/* ─────────────────────────────────────────────
-   EXPENSE CONTAINER
-───────────────────────────────────────────── */
 #expenses-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -1027,7 +977,6 @@ input:focus {
   position: relative;
 }
 
-/* ─── Loading spinner ─── */
 .loading-spinner {
   grid-column: 1/-1;
   display: flex;
@@ -1061,7 +1010,6 @@ input:focus {
   text-transform: uppercase;
 }
 
-/* ─── Empty state ─── */
 .empty-state {
   grid-column: 1/-1;
   display: flex;
@@ -1114,9 +1062,6 @@ input:focus {
   line-height: 1.65;
 }
 
-/* ─────────────────────────────────────────────
-   TRANSACTION CARDS  (JS-injected <div>s)
-───────────────────────────────────────────── */
 #expenses-container > div {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -1147,7 +1092,6 @@ input:focus {
   }
 }
 
-/* Staggered delays */
 #expenses-container > div:nth-child(1) {
   animation-delay: 0.04s;
 }
@@ -1173,7 +1117,6 @@ input:focus {
   animation-delay: 0.39s;
 }
 
-/* Gold left stripe */
 #expenses-container > div::before {
   content: "";
   position: absolute;
@@ -1187,7 +1130,6 @@ input:focus {
   transition: opacity var(--t);
 }
 
-/* Top shimmer */
 #expenses-container > div::after {
   content: "";
   position: absolute;
@@ -1217,7 +1159,6 @@ input:focus {
   opacity: 1;
 }
 
-/* Card exit */
 #expenses-container > div.removing {
   animation: cardOut 0.28s var(--ease) both;
   pointer-events: none;
@@ -1230,7 +1171,6 @@ input:focus {
   }
 }
 
-/* ── Amount ── */
 .card-amount {
   font-family: "Cormorant Garamond", serif;
   font-size: 1.7rem;
@@ -1241,7 +1181,6 @@ input:focus {
   margin-bottom: 5px;
 }
 
-/* ── Description ── */
 .card-description {
   font-size: 0.92rem;
   font-weight: 500;
@@ -1252,7 +1191,6 @@ input:focus {
   margin-bottom: 10px;
 }
 
-/* ── Category badge ── */
 .card-category {
   display: inline-flex;
   align-self: flex-start;
@@ -1268,7 +1206,6 @@ input:focus {
   margin-bottom: 0;
 }
 
-/* ── Date ── */
 .card-date {
   font-size: 0.65rem;
   color: var(--muted-mid);
@@ -1279,7 +1216,6 @@ input:focus {
   margin-bottom: 12px;
 }
 
-/* ── Delete button (JS-injected) ── */
 #expenses-container > div > button {
   display: inline-flex;
   align-items: center;
@@ -1304,7 +1240,6 @@ input:focus {
     box-shadow 0.18s;
 }
 
-/* Trash icon via CSS mask */
 #expenses-container > div > button::before {
   content: "";
   display: inline-block;
@@ -1330,9 +1265,6 @@ input:focus {
   box-shadow: none;
 }
 
-/* ─────────────────────────────────────────────
-   SCROLLBAR
-───────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -1347,9 +1279,6 @@ input:focus {
   background: rgba(201, 168, 76, 0.22);
 }
 
-/* ─────────────────────────────────────────────
-   RESPONSIVE
-───────────────────────────────────────────── */
 @media (max-width: 1100px) {
   .expense-grid {
     grid-template-columns: 1fr 1fr;
