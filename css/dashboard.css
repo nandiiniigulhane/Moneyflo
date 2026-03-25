@@ -513,7 +513,6 @@ input:focus {
   background: rgba(255, 255, 255, 0.02);
 }
 
-/* Accent line top */
 .stat-card::before {
   content: "";
   position: absolute;
@@ -562,7 +561,6 @@ input:focus {
   color: var(--success);
 }
 
-/* JS-created #user-current-spending lives here */
 #user-current-spending {
   font-family: "Playfair Display", serif;
   font-size: 1.9rem;

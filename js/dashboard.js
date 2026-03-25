@@ -10,12 +10,15 @@ import {
   deleteExpenseDate,
 } from "./db.js";
 
+const categoryWiseSpendingDiv = document.getElementById(
+  "category-wise-spendings",
+);
+const income = document.getElementById("income");
+
 initCheckUserAuthentication();
 
 let totalSpentByUser;
 let remainingAmount;
-
-const income = document.getElementById("income");
 
 function editIncome() {
   income.readOnly = false;

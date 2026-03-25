@@ -58,6 +58,7 @@ function registerUser(registerForm) {
       );
 
       let uid = userCredential.user.uid;
+      registerForm.reset();
       await addUserData(uid, email, name, mobileNumber);
       window.location.href = "index.html";
     } catch (error) {
