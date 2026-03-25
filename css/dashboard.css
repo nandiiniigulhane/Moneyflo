@@ -42,6 +42,7 @@
   margin: 0;
   padding: 0;
 }
+
 html {
   height: 100%;
   -webkit-font-smoothing: antialiased;
@@ -104,6 +105,7 @@ body::after {
     opacity: 0;
     transform: translateX(-24px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -219,6 +221,7 @@ body::after {
   from {
     background-position: 200% 0;
   }
+
   to {
     background-position: -200% 0;
   }
@@ -373,6 +376,7 @@ input:focus {
     opacity: 0;
     transform: scale(0.95) translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -481,6 +485,7 @@ input:focus {
     opacity: 0;
     transform: translateY(16px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -527,9 +532,11 @@ input:focus {
 .stat-card--income::before {
   background: var(--gold);
 }
+
 .stat-card--spent::before {
   background: var(--danger);
 }
+
 .stat-card--remaining::before {
   background: var(--success);
 }
@@ -554,9 +561,11 @@ input:focus {
 .stat-card--income .stat-card__value {
   color: var(--gold-light);
 }
+
 .stat-card--spent .stat-card__value {
   color: var(--danger);
 }
+
 .stat-card--remaining .stat-card__value {
   color: var(--success);
 }
@@ -818,6 +827,7 @@ input:focus {
     opacity: 0;
     transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -827,18 +837,23 @@ input:focus {
 #expenses-container > *:nth-child(1) {
   animation-delay: 0.05s;
 }
+
 #expenses-container > *:nth-child(2) {
   animation-delay: 0.1s;
 }
+
 #expenses-container > *:nth-child(3) {
   animation-delay: 0.15s;
 }
+
 #expenses-container > *:nth-child(4) {
   animation-delay: 0.2s;
 }
+
 #expenses-container > *:nth-child(5) {
   animation-delay: 0.25s;
 }
+
 #expenses-container > *:nth-child(6) {
   animation-delay: 0.3s;
 }
@@ -949,6 +964,7 @@ input:focus {
   font-weight: 600;
   color: var(--cream);
 }
+
 .card-amount {
   font-family: "Playfair Display", serif;
   font-size: 1.45rem;
@@ -963,6 +979,7 @@ input:focus {
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
+
 .card-date {
   font-size: 0.68rem;
   color: var(--muted-mid);
@@ -974,13 +991,16 @@ input:focus {
 ::-webkit-scrollbar {
   width: 4px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.08);
   border-radius: 99px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(201, 168, 76, 0.25);
 }
@@ -989,6 +1009,7 @@ input:focus {
   .expense-grid {
     grid-template-columns: 1fr 1fr;
   }
+
   .field-group--submit {
     grid-column: 1 / -1;
   }
@@ -1013,10 +1034,12 @@ input:focus {
   .sidebar-brand {
     padding: 20px 20px 16px;
   }
+
   .sidebar-user {
     padding: 0 20px 16px;
     flex: 1;
   }
+
   .sidebar-divider {
     display: none;
   }
@@ -1025,19 +1048,23 @@ input:focus {
     width: 100%;
     padding: 0 20px 16px;
   }
+
   form#info {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 12px;
   }
+
   form#info .field-group {
     flex: 1;
     min-width: 160px;
   }
+
   #add-category-button {
     min-width: 140px;
     align-self: flex-end;
   }
+
   #insight-button {
     margin: 0 20px 20px;
     flex: 1 0 auto;
@@ -1046,11 +1073,13 @@ input:focus {
   .stats-bar {
     grid-template-columns: 1fr;
   }
+
   .stat-card {
     border-right: none;
     border-bottom: 1px solid var(--divider);
     padding: 20px 24px;
   }
+
   .stat-card:last-child {
     border-bottom: none;
   }
@@ -1058,9 +1087,11 @@ input:focus {
   .form-section {
     padding: 24px;
   }
+
   .expense-grid {
     grid-template-columns: 1fr;
   }
+
   .cards-section {
     padding: 24px 24px 40px;
   }

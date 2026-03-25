@@ -10,290 +10,249 @@ import {
   deleteExpenseDate,
 } from "./db.js";
 
-const categoryWiseSpendingDiv = document.getElementById(
-  "category-wise-spendings",
-);
-const income = document.getElementById("income");
+const elements = {
+  username: document.getElementById("username"),
+  incomeInput: document.getElementById("income"),
+  totalSpent: document.getElementById("user-current-spending"),
+  remaining: document.getElementById("stat-remaining"),
+  incomeDisplay: document.getElementById("stat-income-display"),
+  expenseContainer: document.getElementById("expenses-container"),
+  categorySelect: document.getElementById("category"),
+  categoryInput: document.getElementById("categories"),
+  addCategoryBtn: document.getElementById("add-category-button"),
+  expenseForm: document.getElementById("expense-form"),
+  logoutBtn: document.getElementById("logout-user"),
+  incomeBtn: document.getElementById("submit-income-button"),
+};
 
-initCheckUserAuthentication();
+const state = {
+  income: 0,
+  totalSpent: 0,
+  categories: new Set(),
+};
 
-let totalSpentByUser;
-let remainingAmount;
-
-function editIncome() {
-  income.readOnly = false;
-  income.value = "";
-  replaceEditIncomeToAddIncome();
+function formatCurrency(value) {
+  return `₹ ${value}`;
 }
 
-function addIncome() {
-  const incomeElement = document.getElementById("income");
-  const incomeValue = incomeElement.value;
-
-  if (!incomeValue || incomeValue.trim() === "" || Number(incomeValue) <= 0) {
-    alert("add income!");
-    return;
-  }
-  setIncome(incomeElement.value);
-
-  income.readOnly = true;
-  const montlyIncomeStat = document.getElementById("stat-income-display");
-  montlyIncomeStat.textContent = "₹ " + incomeElement.value;
-
-  const remainingStat = document.getElementById("stat-remaining");
-  remainingAmount = incomeValue - totalSpentByUser;
-  remainingStat.textContent = "₹ " + remainingAmount;
-
-  replaceAddIncomeToEditIncome();
+function isValidAmount(value) {
+  return value && value.trim() !== "" && Number(value) > 0;
 }
 
-function replaceEditIncomeToAddIncome() {
-  const editIncomeButton = document.getElementById("edit-income-button");
-  if (editIncomeButton) {
-    const addIncomeButton = document.createElement("button");
-    addIncomeButton.type = "submit";
-    addIncomeButton.id = "submit-income-button";
-    addIncomeButton.textContent = "add income";
-    addIncomeButton.addEventListener("click", () => {
-      addIncome();
-    });
-    editIncomeButton.replaceWith(addIncomeButton);
-  }
+function formatDate(date) {
+  return new Date(date).toLocaleDateString("en-GB");
 }
 
-function replaceAddIncomeToEditIncome() {
-  const incomeButton = document.getElementById("submit-income-button");
-  if (income.readOnly === true && incomeButton) {
-    const editIncomeButton = document.createElement("button");
-    editIncomeButton.type = "submit";
-    editIncomeButton.id = "edit-income-button";
-    editIncomeButton.textContent = "edit income";
-    editIncomeButton.addEventListener("click", () => {
-      editIncome();
-    });
-    incomeButton.replaceWith(editIncomeButton);
-  }
+function getRemaining() {
+  return state.income - state.totalSpent;
 }
 
-const username = document.getElementById("username");
-getUsername().then((user) => {
-  username.textContent = user;
-});
+function renderStats() {
+  elements.totalSpent.textContent = formatCurrency(state.totalSpent);
+  elements.incomeDisplay.textContent = formatCurrency(state.income);
+  elements.remaining.textContent = formatCurrency(getRemaining());
+}
 
-getIncome().then((incomeValue) => {
-  if (!incomeValue) {
+function enableIncomeEditing() {
+  elements.incomeInput.readOnly = false;
+  elements.incomeInput.value = "";
+  elements.incomeBtn.textContent = "Add Income";
+}
+
+async function saveIncome() {
+  const value = elements.incomeInput.value;
+
+  if (!isValidAmount(value)) {
+    alert("Add valid income!");
     return;
   }
 
-  income.value = incomeValue;
-  income.readOnly = true;
+  await setIncome(value);
 
-  replaceAddIncomeToEditIncome();
+  state.income = Number(value);
+  elements.incomeInput.readOnly = true;
+  elements.incomeBtn.textContent = "Edit Income";
 
-  const incomeButton = document.getElementById("submit-income-button");
+  renderStats();
+}
 
-  const montlyIncomeStat = document.getElementById("stat-income-display");
-  montlyIncomeStat.textContent = "₹ " + incomeValue;
-
-  const remainingStat = document.getElementById("stat-remaining");
-  remainingStat.textContent = "₹ " + incomeValue;
-});
-
-const totalSpentElement = document.getElementById("user-current-spending");
-
-getTotalSpent().then((totalSpent) => {
-  totalSpentByUser = totalSpent;
-  totalSpentElement.textContent = "₹ " + totalSpent;
-
-  remainingAmount = Number(income.value) - totalSpent;
-  const remainingStat = document.getElementById("stat-remaining");
-  remainingStat.textContent = "₹ " + remainingAmount;
-});
-
-const incomeButton = document.getElementById("submit-income-button");
-incomeButton.addEventListener("click", async (event) => {
-  event.preventDefault();
-
-  const incomeElement = document.getElementById("income");
-  const incomeValue = incomeElement.value;
-
-  if (!incomeValue || incomeValue.trim() === "" || Number(incomeValue) <= 0) {
-    alert("add income!");
-    return;
-  }
-  setIncome(incomeElement.value);
-
-  income.readOnly = true;
-  const montlyIncomeStat = document.getElementById("stat-income-display");
-  montlyIncomeStat.textContent = "₹ " + incomeElement.value;
-
-  const remainingStat = document.getElementById("stat-remaining");
-  remainingAmount = incomeValue;
-  remainingStat.textContent = incomeElement.value;
-
-  replaceAddIncomeToEditIncome();
-});
-
-let categories = new Set();
-
-const categoryButton = document.getElementById("add-category-button");
-categoryButton.addEventListener("click", async (event) => {
-  event.preventDefault();
-
-  const categoryElement = document.getElementById("categories");
-  await addCategory(categoryElement.value);
-
-  if (categories.has(categoryElement.value)) {
-    return;
-  }
-  categories.add(categoryElement.value);
-  categoryDropDown(categoryElement.value);
-  categoryElement.value = "";
-});
-
-const transactionForm = document.getElementById("expense-form");
-transactionForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const income = await getIncome();
-  if (!income) {
-    alert("add income first!");
-    return;
-  }
-
-  const formData = new FormData(transactionForm);
-  const transaction = Object.fromEntries(formData.entries());
-
-  let amount = transaction["amount"];
-  let description = transaction["description"];
-  let category = transaction["category"];
-  let date = transaction["date"];
-
-  let parsedDate;
-
-  if (!date || date.trim() === "") {
-    parsedDate = new Date();
+function handleIncomeButton() {
+  if (elements.incomeInput.readOnly) {
+    enableIncomeEditing();
   } else {
-    parsedDate = new Date(date);
+    saveIncome();
   }
-
-  const formattedDate = parsedDate.toLocaleDateString("en-GB");
-  date = formattedDate;
-
-  if (!amount || amount.trim() === "" || !category || category.trim() === "") {
-    alert("add amount and category!");
-    return;
-  }
-
-  const id = await addExpenseData(amount, description, category, date);
-  totalSpentByUser += Number(amount);
-  totalSpentElement.textContent = "₹ " + totalSpentByUser;
-
-  const remainingStat = document.getElementById("stat-remaining");
-  remainingAmount -= Number(amount);
-  remainingStat.textContent = "₹ " + remainingAmount;
-
-  transactionCard(id, amount, category, description, date);
-  transactionForm.reset();
-});
-
-function transactionCard(id, amount, category, description, date) {
-  const expenseContainer = document.getElementById("expenses-container");
-
-  const cardDiv = document.createElement("div");
-  cardDiv.id = id;
-  const amountElement = document.createElement("p");
-  amountElement.textContent = amount;
-  amountElement.classList.add("card-amount");
-  cardDiv.appendChild(amountElement);
-
-  const categoryElement = document.createElement("p");
-  categoryElement.textContent = category;
-  categoryElement.classList.add("card-category");
-  cardDiv.appendChild(categoryElement);
-
-  const descriptionElement = document.createElement("p");
-  descriptionElement.textContent = description;
-  descriptionElement.classList.add("card-description");
-  cardDiv.appendChild(descriptionElement);
-
-  const dateElement = document.createElement("p");
-  dateElement.textContent = date;
-  descriptionElement.classList.add("card-date");
-  cardDiv.appendChild(dateElement);
-
-  const deleteTransactionButton = document.createElement("button");
-  deleteTransactionButton.id = "delete-transaction-card" + id;
-  deleteTransactionButton.textContent = "delete transaction";
-  cardDiv.appendChild(deleteTransactionButton);
-
-  expenseContainer.appendChild(cardDiv);
-  deleteTransactionButton.addEventListener("click", () =>
-    deleteTransaction(id, amount),
-  );
 }
 
-function deleteTransaction(cardId, amount) {
-  const cardElement = document.getElementById(cardId);
-  deleteExpenseDate(cardId);
-  cardElement.remove();
+async function handleAddCategory(event) {
+  event.preventDefault();
 
-  totalSpentByUser -= Number(amount);
-  totalSpentElement.textContent = "₹ " + totalSpentByUser;
+  const category = elements.categoryInput.value.trim();
+  if (!category) return;
 
-  const remainingStat = document.getElementById("stat-remaining");
-  remainingAmount += Number(amount);
-  remainingStat.textContent = "₹ " + remainingAmount;
+  if (state.categories.has(category)) return;
+
+  await addCategory(category);
+  addCategoryToDropdown(category);
+
+  elements.categoryInput.value = "";
 }
 
-function initLoadingTransactions() {
-  getExpensesData().then((transactions) => {
-    transactions.forEach((transaction) => {
-      transactionCard(
-        transaction.id,
-        transaction["amount"],
-        transaction["category"],
-        transaction["description"],
-        transaction["date"],
-      );
-    });
-  });
-}
-
-function categoryDropDown(category) {
-  categories.add(category);
-  const selectTag = document.getElementById("category");
+function addCategoryToDropdown(category) {
+  state.categories.add(category);
 
   const option = document.createElement("option");
   option.value = category;
   option.textContent = category;
 
-  selectTag.appendChild(option);
+  elements.categorySelect.appendChild(option);
 }
 
-function initCategoriesDropDown() {
-  let count = 0;
-  getAllCategories().then((categories) => {
-    categories.forEach((category) => {
-      categoryDropDown(category);
-      count++;
-    });
+async function handleTransactionSubmit(event) {
+  event.preventDefault();
+
+  if (!state.income) {
+    alert("Add income first!");
+    return;
+  }
+
+  const formData = new FormData(elements.expenseForm);
+  const transaction = Object.fromEntries(formData.entries());
+
+  const amount = transaction.amount;
+  const category = transaction.category;
+  const description = transaction.description;
+  const date = transaction.date
+    ? formatDate(transaction.date)
+    : formatDate(new Date());
+
+  if (!isValidAmount(amount) || !category) {
+    alert("Add amount and category!");
+    return;
+  }
+
+  try {
+    const id = await addExpenseData(amount, description, category, date);
+
+    state.totalSpent += Number(amount);
+    renderStats();
+
+    createTransactionCard(id, amount, category, description, date);
+
+    elements.expenseForm.reset();
+  } catch (err) {
+    alert("Failed to save transaction");
+  }
+}
+
+function createTransactionCard(id, amount, category, description, date) {
+  const card = document.createElement("div");
+  card.id = id;
+
+  const amountEl = document.createElement("p");
+  amountEl.textContent = amount;
+  amountEl.classList.add("card-amount");
+
+  const categoryEl = document.createElement("p");
+  categoryEl.textContent = category;
+  categoryEl.classList.add("card-category");
+
+  const descriptionEl = document.createElement("p");
+  descriptionEl.textContent = description;
+  descriptionEl.classList.add("card-description");
+
+  const dateEl = document.createElement("p");
+  dateEl.textContent = date;
+  dateEl.classList.add("card-date");
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Delete Transaction";
+
+  deleteBtn.addEventListener("click", () =>
+    deleteTransaction(id, amount, card),
+  );
+
+  card.append(amountEl, categoryEl, descriptionEl, dateEl, deleteBtn);
+  elements.expenseContainer.appendChild(card);
+}
+
+async function deleteTransaction(id, amount, card) {
+  await deleteExpenseDate(id);
+
+  card.remove();
+
+  state.totalSpent -= Number(amount);
+  renderStats();
+}
+
+async function loadUser() {
+  const user = await getUsername();
+  elements.username.textContent = user;
+}
+
+async function loadIncome() {
+  const income = await getIncome();
+  if (!income) return;
+
+  state.income = Number(income);
+  elements.incomeInput.value = income;
+  elements.incomeInput.readOnly = true;
+  elements.incomeBtn.textContent = "Edit Income";
+
+  renderStats();
+}
+
+async function loadTotalSpent() {
+  const total = await getTotalSpent();
+  state.totalSpent = total;
+  renderStats();
+}
+
+async function loadTransactions() {
+  const transactions = await getExpensesData();
+
+  transactions.forEach((t) => {
+    createTransactionCard(t.id, t.amount, t.category, t.description, t.date);
   });
 }
 
-const logOutButton = document.getElementById("logout-user");
-logOutButton.addEventListener("click", async (event) => {
-  event.preventDefault();
-  localStorage.clear();
-  window.location.href = "index.html";
-});
+async function loadCategories() {
+  const categories = await getAllCategories();
 
-function initCheckUserAuthentication() {
-  const flag = localStorage.getItem("isAuthenticated");
-  if (!flag) {
+  categories.forEach((category) => {
+    addCategoryToDropdown(category);
+  });
+}
+
+function checkAuth() {
+  const isAuthenticated = localStorage.getItem("isAuthenticated");
+  if (!isAuthenticated) {
     window.location.href = "index.html";
   }
 }
 
-initLoadingTransactions();
-initCategoriesDropDown();
+function logout(event) {
+  event.preventDefault();
+  localStorage.clear();
+  window.location.href = "index.html";
+}
+
+function initEventListeners() {
+  elements.incomeBtn.addEventListener("click", handleIncomeButton);
+  elements.addCategoryBtn.addEventListener("click", handleAddCategory);
+  elements.expenseForm.addEventListener("submit", handleTransactionSubmit);
+  elements.logoutBtn.addEventListener("click", logout);
+}
+
+async function init() {
+  checkAuth();
+  initEventListeners();
+
+  await loadUser();
+  await loadIncome();
+  await loadTotalSpent();
+  await loadCategories();
+  await loadTransactions();
+}
+
+init();
